@@ -1,0 +1,403 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">thefirst3</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&amp;family=Noto+Serif+SC:wght@300;400;500&amp;display=swap" rel="stylesheet" vid="7">
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="8"></script>
+
+    <style vid="9">
+        :root {
+            --paper-left: #F7F6F2;
+            --ink-dark: #1E2420;
+            --ink-medium: #4A5D52;
+            --ink-light: #8A9A91;
+            --jade-accent: #6B8E7B;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--paper-left);
+            color: var(--ink-dark);
+            font-family: 'Noto Serif SC', serif;
+            overflow: hidden; 
+            selection-background: var(--jade-accent);
+            selection-color: var(--paper-left);
+        }
+
+        .font-eng {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+        }
+
+        
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background-color: var(--paper-left);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.5s;
+        }
+
+        #splash-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .enso-circle {
+            width: 160px;
+            height: 160px;
+            fill: none;
+            stroke: var(--ink-dark);
+            stroke-width: 1.2;
+            stroke-linecap: round;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            animation: draw-enso 2.5s cubic-bezier(0.6, 0.05, 0.28, 0.91) forwards;
+            transform: rotate(-90deg);
+        }
+
+        @keyframes draw-enso {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .splash-text {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            letter-spacing: 0.6em;
+            color: var(--ink-medium);
+            opacity: 0;
+            animation: fadeInText 2s ease forwards 1s;
+            margin-left: 0.6em; 
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 0.8; }
+        }
+
+        
+        #app-container {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 2s ease, transform 2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        #app-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .overlapping-title {
+            position: absolute;
+            top: 15vh;
+            left: 33.333%;
+            transform: translateX(-50%);
+            z-index: 30;
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 0.6em;
+            line-height: 2.2;
+            color: var(--ink-dark);
+            text-shadow: 0 0 15px rgba(247, 246, 242, 0.8), 0 0 30px rgba(247, 246, 242, 0.4);
+            pointer-events: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        
+        .nav-item {
+            position: relative;
+            display: block;
+            padding-left: 1rem;
+            transition: transform 0.4s ease;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 0%;
+            background-color: var(--jade-accent);
+            transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .nav-group:hover .nav-item {
+            transform: translateX(10px);
+        }
+
+        .nav-group:hover .nav-item::before {
+            height: 100%;
+        }
+
+        .nav-group:hover .nav-cn {
+            color: var(--ink-dark);
+        }
+
+        .nav-group:hover .nav-en {
+            color: var(--ink-medium);
+        }
+
+        .nav-cn {
+            color: var(--ink-medium);
+            transition: color 0.4s ease;
+        }
+
+        .nav-en {
+            color: var(--ink-light);
+            transition: color 0.4s ease;
+        }
+
+        
+        #canvas-panel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #webgl-container {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+        }
+
+        
+        #canvas-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 20px 0 40px rgba(0,0,0,0.03);
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .poem-container {
+            position: absolute;
+            bottom: 12vh;
+            right: 6vw;
+            z-index: 30;
+            font-size: 1rem;
+            color: var(--ink-dark);
+            letter-spacing: 0.4em;
+            line-height: 2.8;
+            opacity: 0.8;
+            mix-blend-mode: color-burn;
+        }
+
+    </style>
+</head>
+<body vid="10">
+
+    
+    <div id="splash-screen" vid="11">
+        <svg class="enso-circle" viewBox="0 0 100 100" vid="12">
+            <path d="M 50, 15 A 35,35 0 1,0 85,50" fill="none" vid="13"></path>
+            <path d="M 85,50 A 35,35 0 0,0 55,15.5" fill="none" stroke-width="0.8" vid="14"></path>
+        </svg>
+        <div class="splash-text" vid="15">WHERE STRATEGY · MEETS EXECUTION</div>
+    </div>
+
+    
+    <main id="app-container" class="flex w-full h-full relative" vid="16">
+        
+        
+        
+
+        
+        <section class="w-1/3 h-full bg-[#F7F6F2] flex flex-col justify-between p-16 z-20 shadow-[10px_0_30px_rgba(0,0,0,0.02)] relative" vid="17">
+            
+            
+            <div class="mt-8" vid="18">
+                <h1 class="font-eng text-2xl tracking-wide text-[#1E2420] mb-2" vid="19">the first three</h1>
+                
+                
+                
+            </div>
+
+            
+            <nav class="flex flex-col gap-10 my-auto ml-4" vid="20">
+                <a href="#" class="nav-group group block cursor-pointer outline-none" vid="21">
+                    <div class="nav-item" vid="22">
+                        <div class="nav-cn text-xl tracking-[0.2em] mb-1 font-eng italic" vid="23">Clients</div>
+                    </div>
+                </a>
+                <a href="#" class="nav-group group block cursor-pointer outline-none" vid="24">
+                    <div class="nav-item" vid="25">
+                        <div class="nav-cn text-xl tracking-[0.2em] mb-1 font-eng italic" vid="26">Services</div>
+                    </div>
+                </a>
+                <a href="#" class="nav-group group block cursor-pointer outline-none" vid="27">
+                    <div class="nav-item" vid="28">
+                        <div class="nav-cn text-xl tracking-[0.2em] mb-1 font-eng italic" vid="29">About</div>
+                    </div>
+                </a>
+            </nav>
+
+            
+            <div class="mb-4" vid="30">
+                <div class="text-xs tracking-[0.2em] text-[#8A9A91] flex items-center gap-4" vid="31">
+                    
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="canvas-panel" class="w-2/3 h-full" vid="32">
+            <div id="webgl-container" vid="33"></div>
+            
+            
+        </section>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" vid="34"></script>
+    <script vid="35">
+        
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                const content = document.getElementById('app-container');
+                
+                splash.classList.add('fade-out');
+                content.classList.add('visible');
+            }, 3000); 
+        });
+
+        
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = vec4(position, 1.0);
+            }
+        `;
+
+        
+        const fragmentShader = `
+            uniform float u_time;
+            uniform vec2 u_resolution;
+            varying vec2 vUv;
+
+            vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+            float snoise(vec2 v){
+                const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                vec2 i  = floor(v + dot(v, C.yy) );
+                vec2 x0 = v -   i + dot(i, C.xx);
+                vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                vec4 x12 = x0.xyxy + C.xxzz;
+                x12.xy -= i1;
+                i = mod(i, 289.0);
+                vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                m = m*m; m = m*m;
+                vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                vec3 h = abs(x) - 0.5;
+                vec3 ox = floor(x + 0.5);
+                vec3 a0 = x - ox;
+                m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                vec3 g;
+                g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                return 130.0 * dot(m, g);
+            }
+
+            float fbm(vec2 st) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                for (int i = 0; i < 6; i++) {
+                    value += amplitude * snoise(st);
+                    st *= 2.0;
+                    amplitude *= 0.5;
+                }
+                return value;
+            }
+
+            void main() {
+                vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                st.x *= u_resolution.x / u_resolution.y;
+                float time = u_time * 0.04;
+                
+                // Flow dynamics
+                vec2 q = vec2(fbm(st + vec2(time)), fbm(st + vec2(1.0)));
+                vec2 r = vec2(fbm(st + 1.2*q + vec2(1.7,9.2)+ 0.15*time), fbm(st + 1.2*q + vec2(8.3,2.8)+ 0.126*time));
+                float f = fbm(st + r);
+
+                // Jade Color Palette
+                vec3 colorBase = vec3(0.92, 0.94, 0.91);  // Very light celadon/paper
+                vec3 colorDeep = vec3(0.42, 0.55, 0.48);  // Deep jade
+                vec3 colorMid = vec3(0.65, 0.75, 0.70);   // Mid jade/mist
+                vec3 colorMist = vec3(0.85, 0.88, 0.86);  // Light mist
+                vec3 colorWhite = vec3(0.98, 0.99, 0.98); // Highlight
+
+                // Color mixing
+                vec3 color = mix(colorBase, colorMist, clamp((f*f)*3.5, 0.0, 1.0));
+                color = mix(color, colorMid, clamp(length(q)*1.2, 0.0, 1.0));
+                color = mix(color, colorDeep, clamp(length(r.x)*1.1, 0.0, 1.0) * 0.5);
+                
+                // Highlights
+                float highlight = smoothstep(0.5, 1.0, f);
+                color = mix(color, colorWhite, highlight * 0.6);
+                
+                // Subtle horizontal flow lines simulating brush strokes or water currents
+                color -= sin(st.y * 150.0 + time * 10.0) * 0.015;
+                color -= sin(st.y * 300.0) * 0.01;
+
+                // Subtle film grain
+                float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) * 0.02;
+                color -= grain;
+
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `;
+
+        const uniforms = {
+            u_time: { value: 0.0 },
+            u_resolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) }
+        };
+
+        const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms });
+        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+        scene.add(mesh);
+
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            uniforms.u_time.value = clock.getElapsedTime();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        
+        window.addEventListener('resize', () => {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            renderer.setSize(width, height);
+            uniforms.u_resolution.value.set(width, height);
+        });
+    </script>
+
+</body></html>
