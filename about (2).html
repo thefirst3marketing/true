@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — the first three</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #F7F6F2;
+            --ink-dark: #1E2420;
+            --ink-medium: #4A5D52;
+            --ink-light: #8A9A91;
+            --jade-accent: #6B8E7B;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--paper);
+            color: var(--ink-dark);
+            font-family: 'Cormorant Garamond', serif;
+            height: 100%;
+        }
+
+        /* ── page wrapper ── */
+        .page {
+            display: flex;
+            min-height: 100vh;
+            opacity: 0;
+            animation: pageIn 0.9s ease forwards 0.1s;
+        }
+        @keyframes pageIn { to { opacity: 1; } }
+
+        /* ── left panel — sticky ── */
+        .left-panel {
+            width: 33.333%;
+            min-width: 220px;
+            flex-shrink: 0;
+            background: var(--paper);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 64px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        /* ── nav ── */
+        .nav-item {
+            position: relative;
+            display: block;
+            padding-left: 1rem;
+            transition: transform 0.4s ease;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 0%;
+            background-color: var(--jade-accent);
+            transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        a:hover .nav-item { transform: translateX(10px); }
+        a:hover .nav-item::before { height: 100%; }
+        a:hover .nav-cn { color: var(--ink-dark); }
+        .nav-cn {
+            color: var(--ink-medium);
+            transition: color 0.4s ease;
+            font-size: 1.25rem;
+            letter-spacing: 0.2em;
+            font-style: italic;
+        }
+        .nav-item.active { transform: translateX(10px); }
+        .nav-item.active::before { height: 100%; }
+        .nav-item.active .nav-cn { color: var(--ink-dark); }
+
+        /* ── right panel — jade gradient background ── */
+        .right-panel {
+            flex: 1;
+            background:
+                radial-gradient(ellipse at 80% 20%, rgba(172, 210, 194, 0.55) 0%, transparent 55%),
+                radial-gradient(ellipse at 20% 80%, rgba(107, 142, 123, 0.45) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 60%, rgba(149, 186, 167, 0.3) 0%, transparent 45%),
+                radial-gradient(ellipse at 10% 30%, rgba(200, 220, 210, 0.4) 0%, transparent 40%),
+                linear-gradient(160deg, #dce8e2 0%, #e8f0eb 35%, #d4e4db 65%, #c8ddd4 100%);
+            border-left: 1px solid rgba(107,142,123,0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 100px 72px 80px;
+            min-height: 100vh;
+        }
+
+        /* ── about content ── */
+        .about-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 0.45em;
+            color: var(--ink-medium);
+            text-transform: uppercase;
+            margin-bottom: 52px;
+            opacity: 0.7;
+        }
+
+        .about-block {
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: blockIn 0.7s ease forwards;
+        }
+        .about-block:nth-child(2) { animation-delay: 0.08s; }
+        .about-block:nth-child(3) { animation-delay: 0.18s; }
+        .about-block:nth-child(4) { animation-delay: 0.28s; }
+        .about-block:nth-child(5) { animation-delay: 0.38s; }
+        .about-block:nth-child(6) { animation-delay: 0.48s; }
+        .about-block:nth-child(7) { animation-delay: 0.58s; }
+
+        @keyframes blockIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .about-block.lead p {
+            font-size: 1.55rem;
+            line-height: 1.55;
+            font-weight: 400;
+            color: var(--ink-dark);
+            letter-spacing: 0.01em;
+            max-width: 580px;
+        }
+
+        .about-block.standout p {
+            font-size: 1.2rem;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--ink-medium);
+            letter-spacing: 0.02em;
+            max-width: 520px;
+        }
+
+        .about-block.body p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--ink-dark);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            opacity: 0.85;
+            max-width: 540px;
+        }
+
+        .about-block.closing p {
+            font-size: 1.1rem;
+            line-height: 1.65;
+            color: var(--ink-medium);
+            letter-spacing: 0.04em;
+            font-style: italic;
+            opacity: 0.8;
+            max-width: 480px;
+        }
+
+        .about-divider {
+            width: 32px;
+            height: 1px;
+            background: rgba(107, 142, 123, 0.5);
+            margin: 36px 0;
+            opacity: 0;
+            animation: blockIn 0.7s ease forwards 0.35s;
+        }
+
+        .about-signoff {
+            margin-top: 52px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(107, 142, 123, 0.3);
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--jade-accent);
+            opacity: 0;
+            animation: blockIn 0.7s ease forwards 0.7s;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 768px) {
+            .page { flex-direction: column; }
+            .left-panel {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 32px 28px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .left-panel nav {
+                flex-direction: row !important;
+                gap: 20px !important;
+                margin: 0 !important;
+            }
+            .right-panel { padding: 48px 28px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+
+        <!-- LEFT PANEL -->
+        <aside class="left-panel">
+            <div>
+                <a href="index.html" style="text-decoration:none; font-family:'Cormorant Garamond',serif; font-size:1.5rem; letter-spacing:0.08em; color:var(--ink-dark); display:block; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.5'" onmouseout="this.style.opacity='1'">the first three</a>
+            </div>
+
+            <nav style="display:flex; flex-direction:column; gap:40px; margin: auto 0 auto 16px;">
+                <a href="clients.html" style="text-decoration:none; display:block;">
+                    <div class="nav-item">
+                        <div class="nav-cn">Clients</div>
+                    </div>
+                </a>
+                <a href="services.html" style="text-decoration:none; display:block;">
+                    <div class="nav-item">
+                        <div class="nav-cn">Services</div>
+                    </div>
+                </a>
+                <a href="about.html" style="text-decoration:none; display:block;">
+                    <div class="nav-item active">
+                        <div class="nav-cn">About</div>
+                    </div>
+                </a>
+            </nav>
+
+            <div></div>
+        </aside>
+
+        <!-- RIGHT PANEL -->
+        <main class="right-panel">
+
+            <div class="about-eyebrow">About</div>
+
+            <div class="about-block lead">
+                <p>Most content isn't built for how people actually consume today. We help brands create marketing that feels intentional, culturally relevant, and impossible to ignore.</p>
+            </div>
+
+            <div class="about-block standout">
+                <p>The best marketing doesn't feel like marketing. It feels like something you don't want to miss.</p>
+            </div>
+
+            <div class="about-divider"></div>
+
+            <div class="about-block body">
+                <p>At The First Three, everything starts with attention. Those first few seconds where someone decides to stop or keep scrolling.</p>
+            </div>
+
+            <div class="about-block body">
+                <p>Blending strategy, storytelling, and visually-driven content, we create work that feels considered, culturally aware, and built to perform.</p>
+            </div>
+
+            <div class="about-block body">
+                <p>From content creation and UGC to social strategy, creative direction, and campaign development, we partner with brands to build marketing that doesn't just exist — it works.</p>
+            </div>
+
+            <div class="about-divider"></div>
+
+            <div class="about-block closing">
+                <p>Because in a world of endless content, only what's intentional stands out.<br>Less noise. More signal.</p>
+            </div>
+
+            <div class="about-signoff">The First Three — Los Angeles</div>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
