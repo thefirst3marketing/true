@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services — the first three</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #F7F6F2;
+            --ink-dark: #1E2420;
+            --ink-medium: #4A5D52;
+            --ink-light: #8A9A91;
+            --jade: #6B8E7B;
+            --jade-light: #dce8e2;
+            --jade-deep: #3d5c4a;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: var(--paper);
+            color: var(--ink-dark);
+            font-family: 'Cormorant Garamond', serif;
+            height: 100%;
+        }
+
+        /* ── page ── */
+        .page {
+            display: flex;
+            min-height: 100vh;
+            opacity: 0;
+            animation: pageIn 0.8s ease forwards 0.1s;
+        }
+        @keyframes pageIn { to { opacity: 1; } }
+
+        /* ── left panel ── */
+        .left-panel {
+            width: 33.333%;
+            min-width: 220px;
+            flex-shrink: 0;
+            background: var(--paper);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 64px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        /* ── nav ── */
+        .nav-item {
+            position: relative;
+            display: block;
+            padding-left: 1rem;
+            transition: transform 0.4s ease;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            transform: translateY(-50%);
+            width: 2px; height: 0%;
+            background-color: var(--jade);
+            transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        a:hover .nav-item { transform: translateX(10px); }
+        a:hover .nav-item::before { height: 100%; }
+        a:hover .nav-cn { color: var(--ink-dark); }
+        .nav-cn {
+            color: var(--ink-medium);
+            transition: color 0.4s ease;
+            font-size: 1.25rem;
+            letter-spacing: 0.2em;
+            font-style: italic;
+        }
+        .nav-item.active { transform: translateX(10px); }
+        .nav-item.active::before { height: 100%; }
+        .nav-item.active .nav-cn { color: var(--ink-dark); }
+
+        /* ── right panel ── */
+        .right-panel {
+            flex: 1;
+            border-left: 1px solid rgba(107,142,123,0.15);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+            background: url('jade.jpg') center center / cover no-repeat;
+        }
+
+        /* ── page header ── */
+        .services-header {
+            padding: 72px 72px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid rgba(107,142,123,0.2);
+            padding-bottom: 40px;
+            background: rgba(247,246,242,0.72);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .services-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 0.45em;
+            color: var(--ink-medium);
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+        .services-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+            color: var(--ink-dark);
+        }
+        .services-title em { font-style: italic; color: var(--jade); }
+        .services-count {
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: var(--ink-light);
+            text-transform: uppercase;
+            padding-bottom: 6px;
+        }
+
+        /* ── service accordion ── */
+        .services-list {
+            flex: 1;
+        }
+
+        .service {
+            border-bottom: 1px solid rgba(107,142,123,0.15);
+            overflow: hidden;
+            opacity: 0;
+            animation: slideIn 0.6s ease forwards;
+        }
+        .service:nth-child(1) { animation-delay: 0.1s; }
+        .service:nth-child(2) { animation-delay: 0.2s; }
+        .service:nth-child(3) { animation-delay: 0.3s; }
+        .service:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .service-trigger {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 56px 1fr auto;
+            align-items: center;
+            gap: 24px;
+            padding: 36px 72px;
+            cursor: pointer;
+            background: rgba(247,246,242,0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: none;
+            text-align: left;
+            transition: background 0.3s ease;
+            position: relative;
+        }
+
+        .service-trigger::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 0;
+            background: var(--jade-deep);
+            transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .service.open .service-trigger::before,
+        .service-trigger:hover::before {
+            width: 3px;
+        }
+
+        .service-trigger:hover { background: rgba(247,246,242,0.82); }
+        .service.open .service-trigger { background: rgba(247,246,242,0.88); }
+
+        .service-num {
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: var(--ink-light);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .service-name-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+        .service-name {
+            font-size: 1.6rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: var(--ink-dark);
+            line-height: 1;
+            transition: color 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .service.open .service-name,
+        .service-trigger:hover .service-name { color: var(--jade-deep); }
+
+        .service-tagline {
+            font-size: 0.9rem;
+            color: var(--ink-light);
+            font-style: italic;
+            letter-spacing: 0.04em;
+            transition: color 0.3s;
+        }
+        .service.open .service-tagline { color: var(--ink-medium); }
+
+        .service-toggle {
+            width: 32px; height: 32px;
+            border: 1px solid rgba(107,142,123,0.3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.3s, border-color 0.3s, transform 0.4s ease;
+            flex-shrink: 0;
+        }
+        .service-toggle svg {
+            width: 12px; height: 12px;
+            stroke: var(--jade);
+            transition: transform 0.4s ease;
+        }
+        .service.open .service-toggle {
+            background: var(--jade-deep);
+            border-color: var(--jade-deep);
+        }
+        .service.open .service-toggle svg { stroke: white; transform: rotate(45deg); }
+
+        /* ── expandable body ── */
+        .service-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .service.open .service-body { max-height: 600px; }
+
+        .service-body-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            padding: 0 72px 44px 132px;
+            background: rgba(247,246,242,0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .service-desc {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--ink-medium);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+        }
+
+        .service-includes { display: flex; flex-direction: column; gap: 20px; }
+
+        .includes-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--jade);
+            margin-bottom: 4px;
+        }
+
+        .includes-list {
+            list-style: none;
+            margin: 0; padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .includes-list li {
+            font-size: 0.92rem;
+            color: var(--ink-dark);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            letter-spacing: 0.02em;
+            line-height: 1.5;
+        }
+
+        .includes-list li::before {
+            content: '—';
+            color: var(--jade);
+            flex-shrink: 0;
+            font-size: 0.75rem;
+            margin-top: 3px;
+        }
+
+        .service-best {
+            font-size: 0.82rem;
+            font-style: italic;
+            color: var(--ink-light);
+            padding-top: 16px;
+            border-top: 1px solid rgba(107,142,123,0.2);
+            letter-spacing: 0.04em;
+        }
+        .service-best strong {
+            color: var(--jade-deep);
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        /* ── bottom CTA strip ── */
+        .services-cta {
+            padding: 32px 72px;
+            border-top: 1px solid rgba(107,142,123,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(247,246,242,0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .cta-text {
+            font-size: 0.88rem;
+            font-style: italic;
+            color: var(--ink-light);
+            letter-spacing: 0.04em;
+        }
+        .cta-link {
+            font-size: 0.72rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--ink-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: gap 0.3s, color 0.2s;
+        }
+        .cta-link:hover { gap: 16px; color: var(--jade-deep); }
+        .cta-link span { font-size: 1rem; }
+
+        /* ── responsive ── */
+        @media (max-width: 768px) {
+            .page { flex-direction: column; }
+            .left-panel {
+                width: 100%; height: auto;
+                position: relative;
+                padding: 32px 28px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .left-panel nav { flex-direction: row !important; gap: 20px !important; margin: 0 !important; }
+            .services-header { padding: 40px 28px 28px; flex-direction: column; align-items: flex-start; gap: 16px; }
+            .service-trigger { padding: 28px 28px; grid-template-columns: 40px 1fr auto; }
+            .service-body-inner { grid-template-columns: 1fr; padding: 0 28px 32px 28px; gap: 28px; }
+            .services-cta { padding: 24px 28px; flex-direction: column; gap: 16px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- LEFT PANEL -->
+    <aside class="left-panel">
+        <div>
+            <a href="index.html" style="text-decoration:none; font-family:'Cormorant Garamond',serif; font-size:1.5rem; letter-spacing:0.08em; color:var(--ink-dark); display:block; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.5'" onmouseout="this.style.opacity='1'">the first three</a>
+        </div>
+
+        <nav style="display:flex; flex-direction:column; gap:40px; margin: auto 0 auto 16px;">
+            <a href="clients.html" style="text-decoration:none; display:block;">
+                <div class="nav-item">
+                    <div class="nav-cn">Clients</div>
+                </div>
+            </a>
+            <a href="services.html" style="text-decoration:none; display:block;">
+                <div class="nav-item active">
+                    <div class="nav-cn">Services</div>
+                </div>
+            </a>
+            <a href="about.html" style="text-decoration:none; display:block;">
+                <div class="nav-item">
+                    <div class="nav-cn">About</div>
+                </div>
+            </a>
+        </nav>
+
+        <div></div>
+    </aside>
+
+    <!-- RIGHT PANEL -->
+    <main class="right-panel">
+
+        <!-- header -->
+        <div class="services-header">
+            <div>
+                <div class="services-eyebrow">What We Offer</div>
+                <div class="services-title">Work that<br><em>performs.</em></div>
+            </div>
+            <div class="services-count">04 Services</div>
+        </div>
+
+        <!-- accordion -->
+        <div class="services-list">
+
+            <!-- 01 -->
+            <div class="service open">
+                <button class="service-trigger" onclick="toggle(this)">
+                    <div class="service-num">01</div>
+                    <div class="service-name-wrap">
+                        <div class="service-name">Full Scope</div>
+                        <div class="service-tagline">All-inclusive content and marketing support</div>
+                    </div>
+                    <div class="service-toggle">
+                        <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5">
+                            <line x1="6" y1="1" x2="6" y2="11"/>
+                            <line x1="1" y1="6" x2="11" y2="6"/>
+                        </svg>
+                    </div>
+                </button>
+                <div class="service-body">
+                    <div class="service-body-inner">
+                        <div>
+                            <p class="service-desc">A high-touch partnership where we handle everything from strategy to execution, ensuring your content is consistent, elevated, and built to perform.</p>
+                            <p class="service-best"><strong>Best for</strong> brands who want a done-for-you, high-signal presence.</p>
+                        </div>
+                        <div class="service-includes">
+                            <div class="includes-label">Includes</div>
+                            <ul class="includes-list">
+                                <li>Ongoing content creation (UGC + branded)</li>
+                                <li>Monthly content strategy + planning</li>
+                                <li>Creative direction + campaign concepts</li>
+                                <li>Hook + messaging development</li>
+                                <li>Social media support + optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 02 -->
+            <div class="service">
+                <button class="service-trigger" onclick="toggle(this)">
+                    <div class="service-num">02</div>
+                    <div class="service-name-wrap">
+                        <div class="service-name">Signal Strategy</div>
+                        <div class="service-tagline">A complete content and marketing blueprint</div>
+                    </div>
+                    <div class="service-toggle">
+                        <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5">
+                            <line x1="6" y1="1" x2="6" y2="11"/>
+                            <line x1="1" y1="6" x2="11" y2="6"/>
+                        </svg>
+                    </div>
+                </button>
+                <div class="service-body">
+                    <div class="service-body-inner">
+                        <div>
+                            <p class="service-desc">We dive deep into your brand and build a clear, intentional strategy designed around what actually works in today's landscape.</p>
+                            <p class="service-best"><strong>Best for</strong> brands who need clarity before execution.</p>
+                        </div>
+                        <div class="service-includes">
+                            <div class="includes-label">Includes</div>
+                            <ul class="includes-list">
+                                <li>Content pillars + direction</li>
+                                <li>Hook frameworks + messaging</li>
+                                <li>Platform-specific strategy</li>
+                                <li>Content roadmap + ideas</li>
+                                <li>Performance insights</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03 -->
+            <div class="service">
+                <button class="service-trigger" onclick="toggle(this)">
+                    <div class="service-num">03</div>
+                    <div class="service-name-wrap">
+                        <div class="service-name">Content Intensive</div>
+                        <div class="service-tagline">High-impact content, created with intention</div>
+                    </div>
+                    <div class="service-toggle">
+                        <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5">
+                            <line x1="6" y1="1" x2="6" y2="11"/>
+                            <line x1="1" y1="6" x2="11" y2="6"/>
+                        </svg>
+                    </div>
+                </button>
+                <div class="service-body">
+                    <div class="service-body-inner">
+                        <div>
+                            <p class="service-desc">A focused content creation experience designed to deliver scroll-stopping visuals you can use across platforms.</p>
+                            <p class="service-best"><strong>Best for</strong> brands who need strong, ready-to-use content.</p>
+                        </div>
+                        <div class="service-includes">
+                            <div class="includes-label">Includes</div>
+                            <ul class="includes-list">
+                                <li>Short-form video (Reels, TikTok, ads)</li>
+                                <li>Product + lifestyle content</li>
+                                <li>Editing optimized for retention</li>
+                                <li>Batch content production</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 04 -->
+            <div class="service">
+                <button class="service-trigger" onclick="toggle(this)">
+                    <div class="service-num">04</div>
+                    <div class="service-name-wrap">
+                        <div class="service-name">Hook Audit</div>
+                        <div class="service-tagline">A fast, strategic reset</div>
+                    </div>
+                    <div class="service-toggle">
+                        <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5">
+                            <line x1="6" y1="1" x2="6" y2="11"/>
+                            <line x1="1" y1="6" x2="11" y2="6"/>
+                        </svg>
+                    </div>
+                </button>
+                <div class="service-body">
+                    <div class="service-body-inner">
+                        <div>
+                            <p class="service-desc">We analyze your current content and identify what's working, what's not, and how to improve your first three seconds immediately.</p>
+                            <p class="service-best"><strong>Best for</strong> brands who want quick, high-impact improvements.</p>
+                        </div>
+                        <div class="service-includes">
+                            <div class="includes-label">Includes</div>
+                            <ul class="includes-list">
+                                <li>Content review + feedback</li>
+                                <li>Hook optimization</li>
+                                <li>Messaging + positioning notes</li>
+                                <li>Actionable recommendations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CTA strip -->
+        <div class="services-cta">
+            <div class="cta-text">Not sure which is right for you?</div>
+            <a href="index.html#contact" class="cta-link">Let's talk <span>→</span></a>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    function toggle(btn) {
+        const service = btn.closest('.service');
+        const isOpen = service.classList.contains('open');
+
+        // close all
+        document.querySelectorAll('.service').forEach(s => s.classList.remove('open'));
+
+        // open clicked if it was closed
+        if (!isOpen) service.classList.add('open');
+    }
+</script>
+
+</body>
+</html>
