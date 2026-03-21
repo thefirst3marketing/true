@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — the first three</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #F7F6F2;
+            --paper-dark: #EEECEA;
+            --ink-dark: #1E2420;
+            --ink-medium: #4A5D52;
+            --ink-light: #8A9A91;
+            --jade: #6B8E7B;
+            --jade-deep: #3d5c4a;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: var(--paper);
+            color: var(--ink-dark);
+            font-family: 'Cormorant Garamond', serif;
+            height: 100%;
+        }
+
+        /* ── paper texture via SVG filter + CSS noise ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.045;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+
+        /* subtle horizontal grain lines like laid paper */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 3px,
+                rgba(180, 170, 155, 0.018) 3px,
+                rgba(180, 170, 155, 0.018) 4px
+            );
+        }
+
+        /* ── page ── */
+        .page {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: pageIn 0.9s ease forwards 0.1s;
+        }
+        @keyframes pageIn { to { opacity: 1; } }
+
+        /* ── left panel ── */
+        .left-panel {
+            width: 33.333%;
+            min-width: 220px;
+            flex-shrink: 0;
+            background: rgba(247,246,242,0.9);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 64px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        /* ── nav ── */
+        .nav-item {
+            position: relative;
+            display: block;
+            padding-left: 1rem;
+            transition: transform 0.4s ease;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            transform: translateY(-50%);
+            width: 2px; height: 0%;
+            background-color: var(--jade);
+            transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        a:hover .nav-item { transform: translateX(10px); }
+        a:hover .nav-item::before { height: 100%; }
+        a:hover .nav-cn { color: var(--ink-dark); }
+        .nav-cn {
+            color: var(--ink-medium);
+            transition: color 0.4s ease;
+            font-size: 1.25rem;
+            letter-spacing: 0.2em;
+            font-style: italic;
+        }
+        .nav-item.active { transform: translateX(10px); }
+        .nav-item.active::before { height: 100%; }
+        .nav-item.active .nav-cn { color: var(--ink-dark); }
+
+        /* ── right panel ── */
+        .right-panel {
+            flex: 1;
+            border-left: 1px solid rgba(107,142,123,0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 80px 80px 72px;
+            min-height: 100vh;
+        }
+
+        /* ── header ── */
+        .contact-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 0.45em;
+            color: var(--ink-medium);
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: blockIn 0.6s ease forwards 0.1s;
+        }
+
+        .contact-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            line-height: 1.1;
+            color: var(--ink-dark);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: blockIn 0.6s ease forwards 0.2s;
+        }
+        .contact-title em { font-style: italic; color: var(--jade); }
+
+        .contact-sub {
+            font-size: 1rem;
+            color: var(--ink-light);
+            font-style: italic;
+            letter-spacing: 0.04em;
+            margin-bottom: 52px;
+            opacity: 0;
+            animation: blockIn 0.6s ease forwards 0.3s;
+        }
+
+        @keyframes blockIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── form ── */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            max-width: 580px;
+            opacity: 0;
+            animation: blockIn 0.7s ease forwards 0.4s;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid rgba(107,142,123,0.2);
+            border-right: 1px solid rgba(107,142,123,0.2);
+            padding: 20px 24px;
+            position: relative;
+            transition: background 0.25s ease;
+        }
+        .form-group:last-child { border-right: none; }
+        .form-group:focus-within {
+            background: rgba(107,142,123,0.04);
+        }
+        .form-group:focus-within .form-label { color: var(--jade); }
+
+        /* top border for first row */
+        .form-row:first-of-type .form-group,
+        .form-group:first-child {
+            border-top: 1px solid rgba(107,142,123,0.2);
+        }
+        .form-group.full {
+            border-right: none;
+            border-top: none;
+        }
+
+        .form-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--ink-dark);
+            letter-spacing: 0.02em;
+            width: 100%;
+            resize: none;
+        }
+        .form-input::placeholder,
+        .form-textarea::placeholder { color: var(--ink-light); opacity: 0.5; font-style: italic; }
+        .form-select { cursor: pointer; appearance: none; }
+        .form-select option { background: var(--paper); }
+        .form-textarea { min-height: 90px; line-height: 1.7; }
+
+        /* ── submit ── */
+        .form-submit-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 0 0;
+        }
+
+        .form-note {
+            font-size: 0.78rem;
+            font-style: italic;
+            color: var(--ink-light);
+            letter-spacing: 0.04em;
+        }
+
+        .btn-submit {
+            background: var(--ink-dark);
+            color: var(--paper);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            padding: 16px 36px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-submit:hover { background: var(--jade-deep); transform: translateY(-2px); }
+        .btn-submit .arrow { transition: transform 0.25s ease; }
+        .btn-submit:hover .arrow { transform: translateX(4px); }
+
+        /* ── success ── */
+        .success-msg {
+            display: none;
+            margin-top: 20px;
+            padding: 20px 24px;
+            border: 1px solid rgba(107,142,123,0.3);
+            background: rgba(107,142,123,0.05);
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--jade-deep);
+            letter-spacing: 0.04em;
+            animation: blockIn 0.5s ease forwards;
+        }
+
+        /* ── contact details (left panel bottom) ── */
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .contact-detail-item {}
+        .contact-detail-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 4px;
+        }
+        .contact-detail-value {
+            font-size: 0.92rem;
+            color: var(--ink-medium);
+            letter-spacing: 0.04em;
+        }
+        .contact-detail-value a {
+            color: var(--ink-medium);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .contact-detail-value a:hover { color: var(--jade-deep); }
+
+        /* ── responsive ── */
+        @media (max-width: 768px) {
+            .page { flex-direction: column; }
+            .left-panel {
+                width: 100%; height: auto;
+                position: relative;
+                padding: 32px 28px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .left-panel nav { flex-direction: row !important; gap: 20px !important; margin: 0 !important; }
+            .contact-details { display: none; }
+            .right-panel { padding: 48px 28px 60px; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-group { border-right: none !important; }
+            .contact-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- LEFT PANEL -->
+    <aside class="left-panel">
+        <div>
+            <a href="index.html" style="text-decoration:none; font-family:'Cormorant Garamond',serif; font-size:1.5rem; letter-spacing:0.08em; color:var(--ink-dark); display:block; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.5'" onmouseout="this.style.opacity='1'">the first three</a>
+        </div>
+
+        <nav style="display:flex; flex-direction:column; gap:40px; margin: auto 0 auto 16px;">
+            <a href="clients.html" style="text-decoration:none; display:block;">
+                <div class="nav-item">
+                    <div class="nav-cn">Clients</div>
+                </div>
+            </a>
+            <a href="services.html" style="text-decoration:none; display:block;">
+                <div class="nav-item">
+                    <div class="nav-cn">Services</div>
+                </div>
+            </a>
+            <a href="about.html" style="text-decoration:none; display:block;">
+                <div class="nav-item">
+                    <div class="nav-cn">About</div>
+                </div>
+            </a>
+        </nav>
+
+        <div class="contact-details">
+            <div class="contact-detail-item">
+                <div class="contact-detail-label">Email</div>
+                <div class="contact-detail-value"><a href="mailto:hello@thefirstthree.co">hello@thefirstthree.co</a></div>
+            </div>
+            <div class="contact-detail-item">
+                <div class="contact-detail-label">Based in</div>
+                <div class="contact-detail-value">Los Angeles, CA</div>
+            </div>
+            <div class="contact-detail-item">
+                <div class="contact-detail-label">Response time</div>
+                <div class="contact-detail-value">Within 1 business day</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- RIGHT PANEL -->
+    <main class="right-panel">
+
+        <div class="contact-eyebrow">Get in Touch</div>
+        <div class="contact-title">Let's make your<br>first three <em>count.</em></div>
+        <div class="contact-sub">Tell us about your brand. We'll take it from there.</div>
+
+        <form class="form" id="contact-form" action="https://formspree.io/f/xvzwyjqg" method="POST">
+
+            <!-- row 1: name + email -->
+            <div class="form-row">
+                <div class="form-group" style="border-top: 1px solid rgba(107,142,123,0.2);">
+                    <label class="form-label">Name</label>
+                    <input class="form-input" type="text" placeholder="Your name" required />
+                </div>
+                <div class="form-group" style="border-top: 1px solid rgba(107,142,123,0.2);">
+                    <label class="form-label">Email</label>
+                    <input class="form-input" type="email" placeholder="you@yourbrand.com" required />
+                </div>
+            </div>
+
+            <!-- row 2: company + budget -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Company / Brand</label>
+                    <input class="form-input" type="text" placeholder="Your brand name" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Monthly Budget</label>
+                    <input class="form-input" type="text" placeholder="e.g. $3,000 / month" />
+                </div>
+            </div>
+
+            <!-- row 3: message -->
+            <div class="form-group full" style="border-top: none; border-bottom: 1px solid rgba(107,142,123,0.2); border-right: none; border-left: none; padding-left: 0; padding-right: 0;">
+                <label class="form-label">Tell us about your brand & goals</label>
+                <textarea class="form-textarea" placeholder="What are you building, and what's standing in the way?"></textarea>
+            </div>
+
+            <div class="form-submit-row">
+                <div class="form-note">We respond within one business day.</div>
+                <button type="submit" class="btn-submit">
+                    Send Inquiry <span class="arrow">→</span>
+                </button>
+            </div>
+
+            <div class="success-msg" id="success-msg">
+                ✦ &nbsp; Received. We'll be in touch shortly.
+            </div>
+
+        </form>
+
+    </main>
+
+</div>
+
+<script>
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = this;
+        const data = new FormData(form);
+
+        try {
+            const res = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (res.ok) {
+                document.getElementById('success-msg').style.display = 'block';
+                form.querySelector('.btn-submit').style.display = 'none';
+                form.querySelector('.form-note').style.display = 'none';
+                form.reset();
+            } else {
+                alert('Something went wrong. Please try again or email us directly.');
+            }
+        } catch (err) {
+            alert('Something went wrong. Please try again or email us directly.');
+        }
+    });
+</script>
+
+</body>
+</html>
