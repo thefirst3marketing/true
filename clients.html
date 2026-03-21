@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -178,8 +179,19 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        .clients-note {
-            margin-top: 40px;
+        .logo-img {
+            max-height: 52px;
+            max-width: 140px;
+            width: auto;
+            object-fit: contain;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            filter: saturate(0);
+        }
+        .logo-cell:hover .logo-img {
+            opacity: 1;
+            filter: saturate(1);
+        }
             font-family: 'Cormorant Garamond', serif;
             font-size: 0.78rem;
             letter-spacing: 0.3em;
@@ -229,17 +241,15 @@
             <div id="clients-overlay">
                 <div class="clients-heading">Our Clients</div>
                 <div class="logo-grid">
-                    <!-- Replace the .logo-name divs with <img> tags when you have real logos -->
-                    <!-- e.g. <img src="logos/brand.svg" alt="Brand Name" class="max-h-8 w-auto opacity-75"> -->
-                    <div class="logo-cell"><div class="logo-name">Kinetic Beauty</div></div>
-                    <div class="logo-cell"><div class="logo-name">Northfield Labs</div></div>
-                    <div class="logo-cell"><div class="logo-name">The Grove Hotels</div></div>
-                    <div class="logo-cell"><div class="logo-name">Arlo Provisions</div></div>
-                    <div class="logo-cell"><div class="logo-name">Maison Soleil</div></div>
-                    <div class="logo-cell"><div class="logo-name">Drift Studio</div></div>
-                    <div class="logo-cell"><div class="logo-name">Cove Supply Co.</div></div>
-                    <div class="logo-cell"><div class="logo-name">Lumen Health</div></div>
-                    <div class="logo-cell"><div class="logo-name">Arcadia Goods</div></div>
+                    <div class="logo-cell"><img src="logos/logo jiang.svg" alt="Jiang" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo germanikure.svg" alt="Germanikure" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo compostic.svg" alt="Compostic" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo cicada.svg" alt="Cicada" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo Prime Roots .svg" alt="Prime Roots" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo osmo.svg" alt="Osmo" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo our place.svg" alt="Our Place" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo svdpla.svg" alt="SVDPLA" class="logo-img"></div>
+                    <div class="logo-cell"><img src="logos/logo athena.svg" alt="Athena" class="logo-img"></div>
                 </div>
                 <div class="clients-note">a selection of brands we've had the privilege of working with</div>
             </div>
