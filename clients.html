@@ -90,7 +90,7 @@
         /* ── right panel ── */
         .right-panel {
             flex: 1;
-            background: var(--paper);
+            background: url('background.jpg') center center / cover no-repeat;
             border-left: 1px solid rgba(107,142,123,0.12);
             display: flex;
             flex-direction: column;
@@ -115,12 +115,14 @@
             gap: 1px;
             width: 100%;
             max-width: 680px;
-            background: rgba(107,142,123,0.12);
-            border: 1px solid rgba(107,142,123,0.12);
+            background: rgba(107,142,123,0.2);
+            border: 1px solid rgba(107,142,123,0.2);
         }
 
         .logo-cell {
-            background: var(--paper);
+            background: rgba(247, 246, 242, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -130,7 +132,7 @@
             opacity: 0;
             animation: cellIn 0.5s ease forwards;
         }
-        .logo-cell:hover { background: #EEECEA; }
+        .logo-cell:hover { background: rgba(247, 246, 242, 0.88); }
 
         .logo-cell:nth-child(1) { animation-delay: 0.05s; }
         .logo-cell:nth-child(2) { animation-delay: 0.10s; }
@@ -228,16 +230,15 @@
             <div class="clients-heading">Our Clients</div>
 
             <div class="logo-grid">
-                <div class="logo-cell"><img src="logos/logo our place.svg" alt="Our Place" class="logo-img"></div>
-                <div class="logo-cell"><img src="logos/logo svdpla.svg" alt="SVDPLA" class="logo-img"></div>
-                <div class="logo-cell"><img src="logos/logo athena.svg" alt="Athena" class="logo-img"></div>
                 <div class="logo-cell"><img src="logos/logo jiang.svg" alt="Jiang" class="logo-img"></div>
                 <div class="logo-cell"><img src="logos/logo germanikure.svg" alt="Germanikure" class="logo-img"></div>
                 <div class="logo-cell"><img src="logos/logo compostic.svg" alt="Compostic" class="logo-img"></div>
-                <div class="logo-cell"><img src="logos/logo cicada 2.svg" alt="Cicada" class="logo-img"></div>
+                <div class="logo-cell"><img src="logos/logo cicada.svg" alt="Cicada" class="logo-img"></div>
                 <div class="logo-cell"><img src="logos/logo Prime Roots .svg" alt="Prime Roots" class="logo-img"></div>
                 <div class="logo-cell"><img src="logos/logo osmo.svg" alt="Osmo" class="logo-img"></div>
-
+                <div class="logo-cell"><img src="logos/logo our place.svg" alt="Our Place" class="logo-img"></div>
+                <div class="logo-cell"><img src="logos/logo svdpla.svg" alt="SVDPLA" class="logo-img"></div>
+                <div class="logo-cell"><img src="logos/logo athena.svg" alt="Athena" class="logo-img"></div>
             </div>
 
             <div class="clients-note">a selection of brands we've had the privilege of working with</div>
